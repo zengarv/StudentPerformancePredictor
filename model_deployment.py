@@ -4,6 +4,9 @@ import tensorflow as tf
 import pandas as pd
 import numpy as np
 
+import os
+
+models = [m for m in os.listdir() if m.endswith('.h5')]
 model = tf.keras.models.load_model('marks_predictor_v2.h5')
 
 def predict(hrs_std, prev_scr, ex_ac, sleep, qp):
@@ -21,9 +24,12 @@ html_temp = """
             
 st.markdown(html_temp,unsafe_allow_html=True)
 
-hrs_std = float(st.text_input("Hours Studied", "4"))
-# Run predict as soon as enter is pressed
 
+model_select = st.selectbox('Select a model:', models, 1)
+# Change the model to the selected model
+model = tf.keras.models.load_model(model_select)
+
+hrs_std = float(st.text_input("Hours Studied", "4"))
 prev_scr = float(st.text_input("Previous Scores", "98"))
 ex_ac = st.text_input("Extracurricular Activities (Yes or No)", "Yes")
 sleep = float(st.text_input("Sleep Hours", "6"))
